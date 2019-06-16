@@ -3,7 +3,12 @@
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="display-3">{% block title %}{{title}}{% endblock %}</h1>
             <div id="member">
-                <a href="">Member</a>
+                {% if app.user %}
+                    <p><a href="{{ path('member') }}">{{member.username}}</a> | <a href="{{ path('logout') }}">Logout</a>
+                {% else %}
+                    <p><a href="{{ path('login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
+                {% endif %}
+                
             </div>
         </div>
     </div>

@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    <form method="post">
+        <div class="form-group">
+          <label for="member_username">Username</label>
+          <input type="text" name="_username" id="member_username" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="member_mail">Email</label>
+          <input type="mail" name="_mail" id="member_mail" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="member_password">Password</label>
+          <input type="password" name="_password" id="member_password" class="form-control">
+        </div>
+
+        <button class="btn btn-primary">Login</button>
+    </form>
+</div>
+
+{% endblock %}
