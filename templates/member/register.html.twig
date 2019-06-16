@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+    {{form_start(form)}}
+        <div style="display:none">
+            {{form_row(form.level)}}
+            {{form_row(form.avatar)}}
+        </div>
+        {{form_widget(form)}}
+    {{form_end(form)}}
+</div>
+
+{% endblock %}
