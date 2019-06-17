@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -18,9 +17,6 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class MemberAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -30,15 +26,13 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
-    private $encoderFactory;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory,EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
-        $this->encoderFactory = $encoderFactory;
     }
 
     public function supports(Request $request)
@@ -68,12 +62,16 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-        $yes = new Member();
-        $encoder = $this->encoderFactory->getEncoder($yes);
-        $mail = $encoder->encodePassword($credentials['mail'], $yes->getSalt());
 
-        $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $mail]);
-        dd($credentials['mail'], $user, $mail, $this->entityManager->getRepository(Member::class)->findAll());
+        $users = $this->entityManager->getRepository(Member::class)->findAll();
+
+        foreach ($users as $value) {
+            if ($this->passwordEncoder->isPasswordValid($value, $credentials['password'])) {
+                dd('find');
+            }
+        }
+        dd('not find');
+        // $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
         
         if (!$user) {
             // fail authentication with a custom error
@@ -86,7 +84,7 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password'], $user->getSalt());
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
     
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
