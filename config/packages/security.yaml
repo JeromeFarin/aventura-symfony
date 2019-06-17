@@ -12,7 +12,8 @@ security:
         main:
             anonymous: ~
             form_login:
-                check_path: login
+                login_path: /login
+                check_path: /login
             guard:
                 authenticators:
                     - App\Security\MemberAuthenticator
