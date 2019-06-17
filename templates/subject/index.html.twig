@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% for post in posts %}
+            <a href="{{ path('post', {'id':post.id}) }}" class="post">
+                <h4>{{post.name}}</h4>
+                <p>{{post.owner}} at {{post.datepost | date}}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

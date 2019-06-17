@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PostController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="post">
+            <h4>{{post.name}}</h4>
+            {{post.content | raw}}
+            <p>{{post.owner}} at {{post.datepost | date}}</p>
+        </div>
+
+        {% if app.user == false %}
+            <div class="comment_form mt-4 mb-4 d-flex justify-content-end">
+                <form method="post">
+                    <textarea name="_content" id="text_block"></textarea><br>
+    
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                </form>
+            </div>
+        {% endif %}     
+
+        {% for comment in comments %}
+            <div class="comment d-flex justify-content-between">
+                {{comment.content | raw}}
+                <p>{{comment.owner}} at {{comment.dateat | date}}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

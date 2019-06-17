@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -63,8 +62,16 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-        
-        $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
+
+        $users = $this->entityManager->getRepository(Member::class)->findAll();
+
+        foreach ($users as $value) {
+            if ($this->passwordEncoder->isPasswordValid($value, $credentials['password'])) {
+                dd('find');
+            }
+        }
+        dd('not find');
+        // $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
         
         if (!$user) {
             // fail authentication with a custom error

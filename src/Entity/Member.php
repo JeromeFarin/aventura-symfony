@@ -127,6 +127,9 @@ class Member implements UserInterface, \Serializable
         return['ROLE_ADMIN'];
     }
 
+    /**
+     * @return string
+     */
     public function getSalt()
     {
         return null;
