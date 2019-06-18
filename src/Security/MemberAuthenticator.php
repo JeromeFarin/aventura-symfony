@@ -63,15 +63,7 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $users = $this->entityManager->getRepository(Member::class)->findAll();
-
-        foreach ($users as $value) {
-            if ($this->passwordEncoder->isPasswordValid($value, $credentials['password'])) {
-                dd('find');
-            }
-        }
-        dd('not find');
-        // $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
+        $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
         
         if (!$user) {
             // fail authentication with a custom error

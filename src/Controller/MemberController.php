@@ -40,7 +40,6 @@ class MemberController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // todo : check if username and mail is available
-            $form->getData()->setMail($this->encoder->encodePassword($form->getData(), $form->getData()->getMail()));
             $form->getData()->setPassword($this->encoder->encodePassword($form->getData(), $form->getData()->getPassword()));
             $this->em->persist($member);
             $this->em->flush();
@@ -62,7 +61,7 @@ class MemberController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        
         return $this->render('security/login.html.twig', [
             'title' => 'Aventura - Login',
             'last_username' => $lastUsername, 
