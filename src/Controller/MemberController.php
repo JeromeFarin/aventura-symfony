@@ -10,18 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Security\MemberAuthenticator;
 
 class MemberController extends AbstractController
 {
     private $em;
     private $encoder;
-    private $auth;
 
-    public function __construct(ObjectManager $em, UserPasswordEncoderInterface $encoder, MemberAuthenticator $auth) {
+    public function __construct(ObjectManager $em, UserPasswordEncoderInterface $encoder) {
         $this->em = $em;
         $this->encoder = $encoder;
-        $this->auth = $auth;
     }
 
     /**
@@ -53,28 +50,41 @@ class MemberController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login", name="app_login")
      */
-    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        
-        return $this->render('member/login.html.twig', [
-            'title' => 'Aventura - Login',
-            'last_username' => $lastUsername, 
-            'error' => $error
-        ]);
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-    /**
-     * @Route("/logout")
-     * @throws \RuntimeException
-     */
-    public function logoutAction()
-    {
-        throw new \RuntimeException('This should never be called directly.');
-    }
+    // /**
+    //  * @Route("/login", name="login")
+    //  */
+    // public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
+    // {
+    //     // get the login error if there is one
+    //     $error = $authenticationUtils->getLastAuthenticationError();
+    //     // last username entered by the user
+    //     $lastUsername = $authenticationUtils->getLastUsername();
+        
+    //     return $this->render('member/login.html.twig', [
+    //         'title' => 'Aventura - Login',
+    //         'last_username' => $lastUsername, 
+    //         'error' => $error
+    //     ]);
+    // }
+
+    // /**
+    //  * @Route("/logout")
+    //  * @throws \RuntimeException
+    //  */
+    // public function logoutAction()
+    // {
+    //     throw new \RuntimeException('This should never be called directly.');
+    // }
 }

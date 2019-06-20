@@ -4,21 +4,21 @@ security:
         from_database:
             entity:
                 class: App\Entity\Member
-                property: username
+                property: mail
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            anonymous: true
             pattern: ^/
             provider: from_database
             form_login:
-                login_path: login
+                login_path: app_login
             logout: true
-            anonymous: ~
-            # guard:
-            #     authenticators:
-            #         - App\Security\MemberAuthenticator
+            guard:
+                authenticators:
+                    - App\Security\MemberAuthenticator
             # http_basic: true
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
