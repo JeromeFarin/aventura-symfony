@@ -37,15 +37,15 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        return 'app_login' === $request->attributes->get('_route')
+        return 'login' === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'mail' => $request->request->get('mail'),
-            'password' => $request->request->get('password'),
+            'mail' => $request->request->get('_mail'),
+            'password' => $request->request->get('_password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
@@ -62,7 +62,6 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-
         $user = $this->entityManager->getRepository(Member::class)->findOneBy(['mail' => $credentials['mail']]);
         
         if (!$user) {
@@ -73,7 +72,7 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
         
         return $user;
     }
-
+    
     public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
@@ -91,6 +90,6 @@ class MemberAuthenticator extends AbstractFormLoginAuthenticator
     
     protected function getLoginUrl()
     {
-        return $this->urlGenerator->generate('app_login');
+        return $this->urlGenerator->generate('login');
     }
 }

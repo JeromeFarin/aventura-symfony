@@ -11,7 +11,13 @@
         </div>
 
         {% if app.user == false %}
-            <div class="comment_form mt-4 mb-4 d-flex justify-content-end">
+            <div class="comment_form mt-4 mb-4">
+                {# {{ form_start(form) }}
+                    
+                    {{ form_widget(form) }}
+
+                    <input type="submit" class="btn" value="Create"/>
+                {{ form_end(form) }} #}
                 <form method="post">
                     <textarea name="_content" id="text_block"></textarea><br>
     

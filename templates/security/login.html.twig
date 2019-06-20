@@ -10,6 +10,8 @@
         {% endif %}
 
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputUser" class="sr-only">Mail</label>
+        <input type="text" name="username" id="inputUser" class="form-control" placeholder="Username" required autofocus>
         <label for="inputMail" class="sr-only">Mail</label>
         <input type="text" value="{{ last_username }}" name="mail" id="inputMail" class="form-control" placeholder="Mail" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>

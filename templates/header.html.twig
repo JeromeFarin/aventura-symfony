@@ -4,9 +4,9 @@
             <h1 class="display-3"><a href="{{ path('index') }}">{% block title %}Aventura{% endblock %}</a></h1>
             <div id="member">
                 {% if app.user %}
-                    <p><a href="{{ path('index') }}">{{app.user.username}}</a> | <a href="{{ path('app_logout') }}">Logout</a>
+                    <p><a href="{{ path('index') }}">{{app.user.username}}</a> | <a href="{{ logout_path('main') }}">Logout</a>
                 {% else %}
-                    <p><a href="{{ path('app_login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
+                    <p><a href="{{ path('login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
                 {% endif %}
                 
             </div>
