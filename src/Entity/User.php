@@ -28,6 +28,7 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @ORM\OneToMany(targetEntity=Role::class)
      * @ORM\Column(type="json")
      */
     private $roles = [];

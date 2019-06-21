@@ -14,11 +14,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for member in members %}
+            {% for user in users %}
                 <tr>
-                    <td scope="row">{{member.username}}</td>
-                    <td>{{member.mail}}</td>
-                    <td>{{member.level}}</td>
+                    <td scope="row">{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.roles | join('|')}}</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUserModal">Edit</button></td>
                     <td><button type="button" class="btn btn-primary">Remove</button></td>
                 </tr>
@@ -32,21 +32,21 @@
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <form method="post">
-                                <input type="hidden" name="_id" value="{{member.id}}">
+                        <div class="modal-body">                           
+                            <form id="user_edit_form" method="post">
+                                <input type="hidden" name="_id" value="{{user.id}}">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="_username" value="{{member.username}}" placeholder="Username">
+                                    <input type="text" class="form-control" name="_username" value="{{user.username}}" placeholder="Username">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="_mail" value="{{member.mail}}" placeholder="Email">
+                                    <input type="text" class="form-control" name="_mail" value="{{user.email}}" placeholder="Email">
                                 </div>
                                 <div class="form-group">
                                         <label for="FormControlSelect">Roles</label>
-                                        <select multiple class="form-control" id="FormControlSelect">
-                                          <option>Admin</option>
-                                          <option>Support</option>
-                                          <option>Police</option>
+                                        <select multiple class="form-control" name="_roles" id="FormControlSelect">
+                                            {% for role in roles %}
+                                            <option value="{{role.id}}">{{role.name}}</option>
+                                            {% endfor %}
                                         </select>
                                       </div>
                             </form>
@@ -54,7 +54,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-dark" data-dismiss="modal">Reset Password</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button form="user_edit_form" type="submit" class="btn btn-primary">Save & Close</button>
                         </div>
                         </div>
                     </div>
