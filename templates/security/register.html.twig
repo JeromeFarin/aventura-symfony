@@ -4,12 +4,13 @@
 
 <div class="container">
     {{form_start(form)}}
-        <div style="display:none">
-            {{form_row(form.level)}}
-            {{form_row(form.avatar)}}
+        <div style="display: none">
+            {{form_row(form.roles)}}
         </div>
         {{form_widget(form)}}
+        <button class="btn btn-lg btn-primary" type="submit">Register</button>
     {{form_end(form)}}
+    
 </div>
 
 {% endblock %}

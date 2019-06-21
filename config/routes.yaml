@@ -4,6 +4,6 @@
 # login:
 #     path: /login
 #     controller: App\Controller\MemberController::login
-# logout:
-#     path: /logout
-#     methods: GET
+logout:
+    path: /logout
+    methods: GET
