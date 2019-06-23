@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+    {{form_start(form)}}
+        {{form_row(form.username)}}
+        {{form_row(form.email)}}
+        <div class="form-group">
+            <select multiple class="form-control" name="roles[]">
+                {% for role in roles %}
+                    {% if role.id in user.roles %}
+                        <option value="{{role.id}}" selected>{{role.name}}</option>
+                    {% else %}
+                        <option value="{{role.id}}">{{role.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    {{form_end(form)}}
+</div>
+
+
+{% endblock %}

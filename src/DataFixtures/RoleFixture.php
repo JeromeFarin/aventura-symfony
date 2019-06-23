@@ -11,7 +11,7 @@ class RoleFixture extends Fixture
     public function load(ObjectManager $manager)
     {
         // $product = new Role();
-        // $product->setName('ROLE_ADMIN');
+        // $product->setName('ROLE_MODO');
         // $manager->persist($product);
 
         // $manager->flush();
