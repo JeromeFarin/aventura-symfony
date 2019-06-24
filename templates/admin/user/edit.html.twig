@@ -15,6 +15,9 @@
                         <option value="{{role.id}}">{{role.name}}</option>
                     {% endif %}
                 {% endfor %}
+                {# {% for key, value in user.roles %}
+                    <option value="{{key}}">{{value}}</option>
+                {% endfor %} #}
             </select>
         </div>
     {{form_end(form)}}

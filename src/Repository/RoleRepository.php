@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Role;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method Role|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,22 +20,20 @@ class RoleRepository extends ServiceEntityRepository
         parent::__construct($registry, Role::class);
     }
 
-    // /**
-    //  * @return Role[] Returns an array of Role objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Role[] Returns an array of Role objects
+     */
+    public function findRoles(User $user)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $roles = $user->getRoles();
+        $user->roles = [];
+        foreach ($roles as $value) {
+            $role = $this->findOneBy(['id' => $value]);
+            $user->setRoles([$role->getId() => $role->getName()]);
+        }
+        
+        return $user;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Role

@@ -62,7 +62,6 @@ class AdminUserController extends AbstractController
         $form->remove('roles');
         $form->add('submit', SubmitType::class, ['label' => 'Edit']);
         $form->handleRequest($request);
-        
         if ($form->isSubmitted() && $form->isValid()) {
             if (!empty($request->request->get('roles'))) {
                 $user->setRoles($request->request->get('roles'));
@@ -71,10 +70,10 @@ class AdminUserController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('admin.user.index');
         }
-        
         return $this->render('admin/user/edit.html.twig', [
             'title' => 'Aventura',
             'roles' => $this->roleRepository->findAll(),
+            // 'user' => $this->roleRepository->findRoles($user),
             'user' => $user,
             'form' => $form->createView()
         ]);

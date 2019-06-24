@@ -17,7 +17,6 @@ class Role
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class)
      * @ORM\Column(type="string", length=100)
      */
     private $name;
@@ -25,6 +24,13 @@ class Role
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
