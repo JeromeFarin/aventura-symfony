@@ -3,33 +3,32 @@
 {% block body %}
 
 <div class="container">
-  {{ form_start(form) }}
-    <div class="d-flex align-items-center justify-content-center">
-      <div class="m-2">{{ form_row(form.name) }}</div>
-      <div class="m-2">{{ form_row(form.level) }}</div>
-      <div class="m-2">{{ form_row(form.submit) }}</div>
-    </div>
-  {{ form_end(form) }}
-  <table class="table">
-      <thead>
-          <tr>
-              <th>Name</th>
-              <th>Level</th>
-              <th>Edit</th>
-              <th>Remove</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for category in categories %}
-            <tr>
-                <td>{{category.name}}</td>
-                <td>{{category.level}}</td>
-                <td><a href="{{ path('admin.category.edit', {id: category.id}) }}" class="btn btn-primary">Edit</a></td>
-                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalConfrim" data-whatever="{{ path('admin.category.remove', {id: category.id}) }}">Remove</button></td>
-            </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.parent) }}
+    {{ form_end(form) }}
+
+    <table class="col-12">
+        {% for category in categories %}
+        <tr class="col-12">
+            <td class="col-4">{{ category.name }}</td>
+
+            {% if category.parent is not null %}
+                <td class="col-3">{{ category.parent.name }}</td>
+            {% else %}
+                <td class="col-3">No parent</td>
+            {% endif %}
+            
+            <td class="col-2">
+                <a href="{{ path('admin.category.edit', {id: category.id}) }}" class="btn btn-secondary">Edit</a>
+            </td>
+
+            <td class="col-2">
+                <a href="{{ path('admin.category.remove', {id: category.id}) }}" class="btn btn-secondary">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
 <div class="modal fade" id="modalConfrim" tabindex="-1" role="dialog">

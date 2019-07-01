@@ -4,25 +4,12 @@
 
 <div class="container">
     {% for category in categories %}
-        <div class="category d-flex flex-column">
-            <h3>{{category.name}}</h3>
-            {% for subject in subjects %}
-                {% if subject.category == category.id %}
-                    <a href="{{ path('subject',{'id': subject.id}) }}" class="subject ml-4">
-                        <h4>{{subject.name}}</h4>
-                        {% for sub_subject in subjects %}
-                            {% if sub_subject.subject == subject.id %}
-                                <a href="{{ path('subject',{'id': sub_subject.id}) }}" class="sub_subject ml-5">
-                                    <h6>{{sub_subject.name}}</h6>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                        
-                    </a>
-                {% endif %}
-            {% endfor %}
+        <div class="category">
+            <h3>{{ category.name }}</h3>
+            <pre>
+                {{ dump(category) }}
+            </pre>
         </div>
-        
     {% endfor %}
 </div>
 

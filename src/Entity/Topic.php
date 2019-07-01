@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TopicRepository")
  */
-class Category
+class Topic
 {
     /**
      * @ORM\Id()
@@ -19,17 +19,27 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="children", cascade={"persist"})
+     * @ORM\Column(type="text")
+     */
+    private $content;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Topic", inversedBy="children", cascade={"persist"})
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="parent", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Topic", mappedBy="parent", cascade={"persist", "remove"})
      */
     private $children;
 
@@ -43,14 +53,38 @@ class Category
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getDateAt(): ?\DateTimeInterface
+    {
+        return $this->date_at;
+    }
+
+    public function setDateAt(\DateTimeInterface $date_at): self
+    {
+        $this->date_at = $date_at;
 
         return $this;
     }

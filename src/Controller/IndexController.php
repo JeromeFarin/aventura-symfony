@@ -6,16 +6,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\CategoryRepository;
-use App\Repository\SubjectRepository;
 
 class IndexController extends AbstractController
 {
     private $categoryRepository;
-    private $subjectRepository;
 
-    public function __construct(CategoryRepository $categoryRepository, SubjectRepository $subjectRepository) {
+    public function __construct(CategoryRepository $categoryRepository) {
         $this->categoryRepository = $categoryRepository;
-        $this->subjectRepository = $subjectRepository;
     }
 
     /**
@@ -26,10 +23,10 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
+        dd($this->categoryRepository->findOneBy(['id' => 4]));
         return $this->render('index.html.twig',[
             'title' => 'Aventura',
-            'categories' => $this->categoryRepository->findAll(),
-            'subjects' => $this->subjectRepository->findAll()
+            'categories' => $this->categoryRepository->findAll()
         ]);
     }
 }

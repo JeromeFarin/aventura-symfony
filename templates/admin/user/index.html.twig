@@ -16,19 +16,9 @@
         <tbody>
             {% for user in users %}
                 <tr>
-                    <td scope="row">{{user.username}}</td>
-                    <td>{{user.email}}</td>
-                    <td>
-                        {% set role_name = [] %}
-                        {% for urole in user.roles %}
-                            {% for role in roles %}
-                                {% if role.id == urole %}
-                                    {% set role_name = role_name|merge([role.name]) %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                        {{role_name | join(' | ') }}
-                    </td>
+                    <td scope="row">{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles | join(' | ') }}</td>
                     <td><a href="{{ path('admin.user.edit', {id: user.id}) }}" class="btn btn-primary">Edit</a></td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalConfrim" data-whatever="{{ path('admin.user.remove', {id: user.id}) }}">Remove</button></td>
                 </tr>

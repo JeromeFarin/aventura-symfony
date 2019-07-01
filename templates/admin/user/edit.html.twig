@@ -9,15 +9,8 @@
         <div class="form-group">
             <select multiple class="form-control" name="roles[]">
                 {% for role in roles %}
-                    {% if role.id in user.roles %}
-                        <option value="{{role.id}}" selected>{{role.name}}</option>
-                    {% else %}
-                        <option value="{{role.id}}">{{role.name}}</option>
-                    {% endif %}
+                    <option value="{{ role.id }}">{{ role.name }}</option>
                 {% endfor %}
-                {# {% for key, value in user.roles %}
-                    <option value="{{key}}">{{value}}</option>
-                {% endfor %} #}
             </select>
         </div>
     {{form_end(form)}}

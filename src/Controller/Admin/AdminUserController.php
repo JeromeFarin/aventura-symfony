@@ -5,12 +5,12 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
-use App\Repository\RoleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ObjectManager;
+use App\Repository\RoleRepository;
 
 class AdminUserController extends AbstractController
 {
@@ -31,10 +31,9 @@ class AdminUserController extends AbstractController
 
     /**
      * @param UserRepository $userRepository
-     * @param RoleRepository $roleRepository
      * @param ObjectManager $em
      */
-    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository, ObjectManager $em) {
+    public function __construct(UserRepository $userRepository, ObjectManager $em, RoleRepository $roleRepository) {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
         $this->em = $em;
@@ -47,8 +46,7 @@ class AdminUserController extends AbstractController
     {        
         return $this->render('admin/user/index.html.twig', [
             'title' => 'Aventura',
-            'users' => $this->userRepository->findAll(),
-            'roles' => $this->roleRepository->findAll()
+            'users' => $this->userRepository->findAll()
         ]);
     }
 
@@ -64,7 +62,11 @@ class AdminUserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (!empty($request->request->get('roles'))) {
-                $user->setRoles($request->request->get('roles'));
+                $roles = [];
+                foreach ($request->request->get('roles') as $value) {
+                    $roles[] = $this->roleRepository->findOneBy(['id' => $value])->getName();
+                }
+                $user->setRoles($roles);
             }
             $this->em->persist($user);
             $this->em->flush();
@@ -73,7 +75,6 @@ class AdminUserController extends AbstractController
         return $this->render('admin/user/edit.html.twig', [
             'title' => 'Aventura',
             'roles' => $this->roleRepository->findAll(),
-            // 'user' => $this->roleRepository->findRoles($user),
             'user' => $user,
             'form' => $form->createView()
         ]);
