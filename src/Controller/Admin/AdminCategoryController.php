@@ -37,7 +37,7 @@ class AdminCategoryController extends AbstractController
 
             return $this->redirectToRoute('admin.category.index');
         }
-        // dd($this->categoryRepository->findAll()[1]->getParent()->getName());
+        
         return $this->render('admin/category/index.html.twig', [
             'title' => 'Aventura',
             'form' => $form->createView(),

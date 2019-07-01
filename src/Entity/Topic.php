@@ -43,9 +43,22 @@ class Topic
      */
     private $children;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="topics")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="topics")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->date_at = new \DateTime();
     }
 
     public function getId(): ?int
@@ -77,12 +90,12 @@ class Topic
         return $this;
     }
 
-    public function getDateAt(): ?\DateTimeInterface
+    public function getDate_at(): ?\DateTimeInterface
     {
         return $this->date_at;
     }
 
-    public function setDateAt(\DateTimeInterface $date_at): self
+    public function setDate_at(\DateTimeInterface $date_at): self
     {
         $this->date_at = $date_at;
 
@@ -128,6 +141,30 @@ class Topic
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

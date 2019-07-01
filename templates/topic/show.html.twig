@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ topic.title }}</h1>
+
+        {{ topic.content | raw}}
+
+        <p>{{ topic.user.username }} at {{ topic.date_at | date("d-F-Y h:m:s", "Europe/Paris") }}</p>
+    </div>
+{% endblock %}

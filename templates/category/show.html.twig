@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h2>{{ category.name }}</h2>
+
+        {% for topic in topics %}
+            <a href="{{ path('topic.show', {id: topic.id}) }}" class="topic">
+                <h4>{{ topic.title }}</h4>
+            </a><br>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            {# {{ form_row(form) }} #}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

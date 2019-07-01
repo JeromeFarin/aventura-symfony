@@ -23,7 +23,6 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
-        dd($this->categoryRepository->findOneBy(['id' => 4]));
         return $this->render('index.html.twig',[
             'title' => 'Aventura',
             'categories' => $this->categoryRepository->findAll()
