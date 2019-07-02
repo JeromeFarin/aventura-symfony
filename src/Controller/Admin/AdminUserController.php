@@ -64,7 +64,7 @@ class AdminUserController extends AbstractController
             if (!empty($request->request->get('roles'))) {
                 $roles = [];
                 foreach ($request->request->get('roles') as $value) {
-                    $roles[] = $this->roleRepository->findOneBy(['id' => $value])->getName();
+                    $roles[] = $this->roleRepository->find($value)->getName();
                 }
                 $user->setRoles($roles);
             }

@@ -4,14 +4,22 @@
     <div class="container">
         <h2>{{ category.name }}</h2>
 
+        {% for category in category.children %}
+            <div class="category">
+                <a href="{{ path('category.show', {id: category.id}) }}">{{ category.name }}</a>
+            </div>
+        {% endfor %}
+
         {% for topic in topics %}
             <a href="{{ path('topic.show', {id: topic.id}) }}" class="topic">
                 <h4>{{ topic.title }}</h4>
             </a><br>
         {% endfor %}
 
-        {{ form_start(form) }}
-            {# {{ form_row(form) }} #}
-        {{ form_end(form) }}
+        {% if is_granted('ROLE_USER') %}
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
+        {% endif %}
     </div>
 {% endblock %}

@@ -3,17 +3,24 @@
 {% block body %}
 
 <div class="container">
-    {% for categoryG in categories %}
-        <div class="category">
-            {% if categoryG.parent is null %}
-                <h3>{{ categoryG.name }}</h3>
-                {% for category in categories %}
-                    {% if category.parent is not null and category.parent.id == categoryG.id %}
-                        <a href="{{ path('category.show', {id: category.id}) }}" class="ml-3">{{ category.name }}</a><br>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+    {% for category in categories %}
+        {% if category.parent is null %}
+            <div class="category">
+                <h2>{{ category.name }}</h2>
+                    {% for category in category.children %}
+                        <div class="category ml-4">
+                            <a href="{{ path('category.show', {id: category.id}) }}">{{ category.name }}</a>
+                            {% if category.children is not empty %}
+                                {% for category in category.children %}
+                                    <div class="ml-4 category">
+                                        <a href="{{ path('category.show', {id: category.id}) }}">{{ category.name }}</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 

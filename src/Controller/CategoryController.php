@@ -33,8 +33,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $form->getData()->setCategory($this->categoryRepository->findOneBy(['id' => $id]));
-            // dd($form->getData());
+            $form->getData()->setCategory($this->categoryRepository->find($id));
+            $form->getData()->setUser($this->getUser());
             $this->em->persist($form->getData());
             $this->em->flush();
 
@@ -42,7 +42,7 @@ class CategoryController extends AbstractController
         }
 
         return $this->render('category/show.html.twig', [
-            'category' => $this->categoryRepository->findOneBy(['id' => $id]),
+            'category' => $this->categoryRepository->find($id),
             'form' => $form->createView(),
             'topics' => $this->topicRepository->findBy(['category' => $id])
         ]);

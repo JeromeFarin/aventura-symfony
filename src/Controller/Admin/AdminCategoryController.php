@@ -52,7 +52,7 @@ class AdminCategoryController extends AbstractController
      */
     public function remove(Request $request, int $id)
     {
-        $this->em->remove($this->categoryRepository->findOneBy(['id' => $id]));
+        $this->em->remove($this->categoryRepository->find($id));
         $this->em->flush();
 
         return $this->redirectToRoute('admin.category.index');
@@ -66,7 +66,7 @@ class AdminCategoryController extends AbstractController
     public function edit(Request $request, int $id)
     {
         
-        $form = $this->createForm(CategoryType::class, $this->categoryRepository->findOneBy(['id' => $id]));
+        $form = $this->createForm(CategoryType::class, $this->categoryRepository->find($id));
 
         $form->handleRequest($request);
 

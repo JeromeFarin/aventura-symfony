@@ -7,5 +7,19 @@
         {{ topic.content | raw}}
 
         <p>{{ topic.user.username }} at {{ topic.date_at | date("d-F-Y h:m:s", "Europe/Paris") }}</p>
+
+        {% for topic in topic.children %}
+            <div class="comment">
+                {{ topic.content | raw }}
+
+                <p>{{ topic.user.username }} at {{ topic.date_at | date("d-F-Y h:m:s", "Europe/Paris") }}</p>
+            </div>
+        {% endfor %}
+
+        {% if is_granted('ROLE_USER') %}
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
+        {% endif %}
     </div>
 {% endblock %}
