@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h2>{{ user.username }}</h2>
+
+        {% for topic in topics | sort | reverse | slice(0,5) %}
+            <div class="m-1" style="border: 1px solid #000">
+                {{ topic.content | raw }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -13,6 +13,15 @@
                 {{ topic.content | raw }}
 
                 <p>{{ topic.user.username }} at {{ topic.date_at | date("d-F-Y h:m:s", "Europe/Paris") }}</p>
+
+                {% if is_granted('ROLE_ADMIN') or topic.user == app.user %}
+                    <a href="{{ path('topic.edit', {id: topic.id}) }}" class="btn btn-secondary">Edit</a>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') or topic.user == app.user %}
+                    <a href="{{ path('topic.remove', {id: topic.id}) }}" class="btn btn-secondary">Delete</a>
+                {% endif %}
+                
             </div>
         {% endfor %}
 

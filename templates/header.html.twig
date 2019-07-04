@@ -5,7 +5,7 @@
                 <h1 class="display-3"><a href="{{ path('index') }}">{% block title %}Aventura{% endblock %}</a></h1>
                 <div id="member">
                     {% if app.user %}
-                        <p><a href="{{ path('index') }}">{{app.user.username}}</a> | <a href="{{ logout_path('main') }}">Logout</a>
+                        <p><a href="{{ path('profile.show', {id: app.user.id}) }}">{{app.user.username}}</a> | <a href="{{ logout_path('main') }}">Logout</a>
                     {% else %}
                         <p><a href="{{ path('app_login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
                     {% endif %}

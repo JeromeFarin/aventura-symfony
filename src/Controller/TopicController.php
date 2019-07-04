@@ -45,4 +45,46 @@ class TopicController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/topic/{id}/remove", name="topic.remove")
+     * @param Request $request
+     * @return void
+     */
+    public function remove(Request $request, int $id)
+    {
+        $topic = $this->topicRepository->find($id);
+
+        $this->em->remove($topic);
+        $this->em->flush();
+
+        return $this->redirectToRoute('topic.show', ['id' => $topic->getParent()->getId()]);
+    }
+
+    /**
+     * @Route("/topic/{id}/edit", name="topic.edit")
+     * @param Request $request
+     * @return void
+     */
+    public function edit(Request $request, int $id)
+    {
+        $topic = $this->topicRepository->find($id);
+
+        $form = $this->createForm(TopicType::class, $topic);
+        $form->remove('title');
+        $form->add('content',TextareaType::class,['label' => false, 'attr' => ['class' => 'ckeditor']]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $this->em->persist($form->getData());
+            $this->em->flush();
+
+            return $this->redirectToRoute('topic.show', ['id' => $topic->getParent()->getId()]);
+        }
+
+        return $this->render('topic/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }

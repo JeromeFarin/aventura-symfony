@@ -10,15 +10,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
+use App\Repository\TopicRepository;
 
 class UserController extends AbstractController
 {
     private $em;
     private $encoder;
+    private $repository;
 
-    public function __construct(ObjectManager $em, UserPasswordEncoderInterface $encoder) {
+    public function __construct(ObjectManager $em, UserPasswordEncoderInterface $encoder, UserRepository $repository) {
         $this->em = $em;
         $this->encoder = $encoder;
+        $this->repository = $repository;
     }
 
     /**
@@ -57,5 +61,18 @@ class UserController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @Route("/profile/{id}", name="profile.show")
+     */
+    public function profile(int $id, TopicRepository $topic): Response
+    {
+        $user = $this->repository->find($id);
+
+        return $this->render('user/profile.html.twig', [
+            'user' => $user,
+            'topics' => $user->getTopics()
+        ]);
     }
 }
