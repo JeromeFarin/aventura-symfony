@@ -5,14 +5,14 @@
 <div class="container">
     {% for category in categories %}
         {% if category.parent is null %}
-            <div class="category">
+            <div class="category_parent">
                 <h2>{{ category.name }}</h2>
                     {% for category in category.children %}
                         <div class="category ml-4">
                             <a href="{{ path('category.show', {id: category.id}) }}">{{ category.name }}</a>
                             {% if category.children is not empty %}
                                 {% for category in category.children %}
-                                    <div class="ml-4 category">
+                                    <div class="ml-4 category_children">
                                         <a href="{{ path('category.show', {id: category.id}) }}">{{ category.name }}</a>
                                     </div>
                                 {% endfor %}

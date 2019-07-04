@@ -16,6 +16,7 @@
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
                         <a class="p-1" href="{{ path('admin.user.index') }}">Users</a>
                     {% endif %}
+                    <a class="p-1" href="{{ path('admin.role.index') }}">Roles</a>
                     <a class="p-1" href="{{ path('admin.category.index') }}">Category</a>
                 </div>
             {% endif %}

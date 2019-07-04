@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TopicRepository;
 use App\Form\TopicType;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TopicController extends AbstractController
 {
@@ -26,6 +27,7 @@ class TopicController extends AbstractController
     {
         $form = $this->createForm(TopicType::class);
         $form->remove('title');
+        $form->add('content',TextareaType::class,['label' => false, 'attr' => ['class' => 'ckeditor']]);
 
         $form->handleRequest($request);
 
