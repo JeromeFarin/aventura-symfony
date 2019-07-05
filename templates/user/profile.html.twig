@@ -9,5 +9,9 @@
                 {{ topic.content | raw }}
             </div>
         {% endfor %}
+
+        {% if user.id == app.user.id %}
+            <a href="{{ path('user.edit', {id: user.id}) }}" class="btn btn-primary">Edit</a>
+        {% endif %}
     </div>
 {% endblock %}
