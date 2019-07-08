@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+
+        {% for conversation in conversations %}
+            {% for user in conversation.user %}
+                {% if app.user == user and conversation.title is not null %}
+                    <div class="conv">
+                        <a href="{{ path('conversation.show', {id: conversation.id}) }}">
+                            {{ conversation.title }}
+                            {{ conversation.message }}
+                            {{ conversation.date_at | date }}
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}

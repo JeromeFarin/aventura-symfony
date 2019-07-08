@@ -5,7 +5,21 @@
                 <h1 class="display-3"><a href="{{ path('index') }}">{% block title %}Aventura{% endblock %}</a></h1>
                 <div id="member">
                     {% if app.user %}
-                        <p><a href="{{ path('profile.show', {id: app.user.id}) }}">{{app.user.username}}</a> | <a href="{{ logout_path('main') }}">Logout</a>
+                            <div id="conv_window">
+                                <a href="{{ path('conversation.index') }}">Conversation</a>
+                                    {% for conversation in app.user.conversations %}
+                                        {% if conversation.title is not null %}
+                                            <div class="conv">
+                                                <a href="{{ path('conversation.show', {id: conversation.id}) }}">
+                                                    {{ conversation.title }}
+                                                    {{ conversation.date_at | date }}
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                <a href="{{ path('conversation.index') }}">Conversation</a>
+                            </div>
+                            <p><i id="conversation" class="far fa-envelope"></i> | <a href="{{ path('profile.show', {id: app.user.id}) }}"><img width="30px" src="{{app.user.cover}}" alt="{{app.user.username}}"></a> | <a href="{{ logout_path('main') }}">Logout</a></p>   
                     {% else %}
                         <p><a href="{{ path('app_login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
                     {% endif %}

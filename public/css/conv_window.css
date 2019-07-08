@@ -1,0 +1,18 @@
+#conversation {
+    cursor: pointer;
+}
+
+#conv_window {
+    width: 200px;
+    background-color: #838383;
+    position: absolute;
+    margin: 40px 0 0 0;
+    border-radius: 10px;
+    padding: 3px;
+    border: 1px solid #000
+}
+
+#conv_window p {
+    margin: 0;
+    padding: 0;
+}

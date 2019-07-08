@@ -13,6 +13,9 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\TopicRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserController extends AbstractController
 {
@@ -91,27 +94,43 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->remove('roles');
         $form->remove('password');
+        $form->add('cover', FileType::class, ['data_class' => null, 'required' => false]);
         $form->add('submit', SubmitType::class, ['label' => 'Edit']);
         $form->add('reset', SubmitType::class, ['label' => 'reset', 'attr' => ['class' => 'btn btn-secondary']]);
-
+    
+        
+        if ($request->files->get('user')['cover'] == null) {
+            $file = new UploadedFile(__FILE__,'null');
+            $request->files->set('user', ['cover' => $file]);
+        }
+        
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('reset')->isClicked()) {
-                $this->resetPassword($form->getData());
+        if ($form->isSubmitted()) {
+            $form->getData()->setCover('/123');
+            dd($form->getData(),$form->isValid(),$form->getErrors());
+            if ($form->isValid()) {
+                if ($form->get('reset')->isClicked()) {
+                    $this->resetPassword($form->getData());
+                    
+                    $this->addFlash('success', 'An email send to '.$user->getEmail());
+    
+                    return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);
+                }
+                $file = $request->files->get('user')['cover'];
                 
-                $this->addFlash('success', 'An email send to '.$user->getEmail());
-
-                return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);
+                $image = 'data:image/'.$file->getClientOriginalExtension().';base64,'.base64_encode(file_get_contents($file->getRealPath()));
+                $user->setCover($image);
+                
+                $this->em->persist($user);
+                $this->em->flush();
+    
+                $this->addFlash('success', 'Profile sauved');
+    
+                return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);            
             }
-
-            $this->em->persist($user);
-            $this->em->flush();
-
-            $this->addFlash('success', 'Profile sauved');
-
-            return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);            
         }
+        
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
@@ -144,8 +163,6 @@ class UserController extends AbstractController
                 }
             }
         }
-
-        // dd('nop');
 
         return $this->render('user/reset_password.html.twig', [
             'user' => $user

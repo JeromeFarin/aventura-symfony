@@ -35,12 +35,13 @@ security:
         # - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/user, roles: ROLE_SUPER_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/conversation, roles: ROLE_USER }
     role_hierarchy:
         ROLE_SUPER_ADMIN: ROLE_ADMIN
         ROLE_ADMIN: ROLE_MODO
         ROLE_MODO: ROLE_USER
     encoders:
         App\Entity\User:
-            algorithm: bcrypt
+            algorithm: auto
             cost: 12
 

@@ -2,6 +2,16 @@
 
 {% block body %}
     <div class="container">
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="d-flex justify-content-center" id="admin_navbar">
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a class="p-1" href="{{ path('admin.user.index') }}">Users</a>
+                {% endif %}
+                <a class="p-1" href="{{ path('admin.role.index') }}">Roles</a>
+                <a class="p-1" href="{{ path('admin.category.index') }}">Category</a>
+            </div>
+        {% endif %}
+        
         <h2>{{ user.username }}</h2>
 
         {% for topic in topics | sort | reverse | slice(0,5) %}
@@ -9,6 +19,8 @@
                 {{ topic.content | raw }}
             </div>
         {% endfor %}
+
+        <img width="200px" src="{{ user.cover }}" alt="{{ user.username }} Cover"><br>
 
         {% if user.id == app.user.id %}
             <a href="{{ path('user.edit', {id: user.id}) }}" class="btn btn-primary">Edit</a>

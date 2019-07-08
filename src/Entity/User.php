@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -50,9 +51,21 @@ class User implements UserInterface
      */
     private $code;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $cover;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Conversation", mappedBy="user")
+     */
+    private $conversations;
+
     public function __construct()
     {
         $this->topics = new ArrayCollection();
+        $this->cover = 'https://img.pngio.com/png-file-svg-profile-png-980_980.png';
+        $this->conversations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,9 +118,6 @@ class User implements UserInterface
 
     public function setRoles(array $roles): self
     {
-        // foreach ($roles as $key => $value) {
-        //     $this->roles[$key] = $value;
-        // }
         $this->roles = $roles;
 
         return $this;
@@ -184,6 +194,46 @@ class User implements UserInterface
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(string $cover): self
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conversation[]
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): self
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations[] = $conversation;
+            $conversation->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): self
+    {
+        if ($this->conversations->contains($conversation)) {
+            $this->conversations->removeElement($conversation);
+            $conversation->removeUser($this);
+        }
 
         return $this;
     }

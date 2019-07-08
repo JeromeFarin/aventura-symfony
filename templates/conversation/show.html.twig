@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {{ conversation.title }}
+        
+        <a href="{{ path('conversation.user', {id: conversation.id}) }}">Manage user</a>
+
+        {% for conversation in conversation.children %}
+            <div class="message">
+                {{ conversation.message | raw }}
+                {{ conversation.date_at | date }}
+                {% for user in conversation.user %}
+                    {{ user.username }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

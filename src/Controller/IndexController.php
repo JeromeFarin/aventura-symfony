@@ -23,6 +23,15 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
+        // $out = [];
+
+        // foreach (glob('js/*.js') as $filename) {
+        //     $p = pathinfo($filename);
+        //     $out[] = $p['filename'];
+        // }
+
+        // $this->get('twig')->addGlobal('files', $out);
+
         return $this->render('index.html.twig',[
             'title' => 'Aventura',
             'categories' => $this->categoryRepository->findAll()

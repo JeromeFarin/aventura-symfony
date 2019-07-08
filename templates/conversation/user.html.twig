@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="added">
+            <h4>participant</h4>
+            {% for user in conversation.user %}
+                <p>{{ user.username }}</p>
+            {% endfor %}
+        </div>
+        <div class="addable">
+            <h4>user</h4>
+            {{ form_start(form) }}
+                <div class="form-group">
+                    <select multiple class="form-control" name="users[]">
+                        {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
