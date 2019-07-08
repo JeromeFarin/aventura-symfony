@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements \Serializable, UserInterface
 {
     /**
      * @ORM\Id()
@@ -257,5 +257,36 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->roles,
+            $this->password,
+            $this->topics,
+            $this->code,
+            $this->cover,
+            $this->uploaded,
+            $this->conversations,
+        ));
+    }
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->roles,
+            $this->password,
+            $this->topics,
+            $this->code,
+            $this->cover,
+            $this->uploaded,
+            $this->conversations,
+            ) = unserialize($serialized);
     }
 }

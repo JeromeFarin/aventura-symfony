@@ -11,11 +11,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use App\Repository\TopicRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserController extends AbstractController
 {
@@ -94,7 +91,7 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->remove('roles');
         $form->remove('password');
-        $form->add('uploaded', FileType::class, ['required' => false]);
+        $form->add('uploaded', FileType::class, ['required' => false, 'label' => false]);
         $form->add('submit', SubmitType::class, ['label' => 'Edit']);
         $form->add('reset', SubmitType::class, ['label' => 'reset', 'attr' => ['class' => 'btn btn-secondary']]);
         
