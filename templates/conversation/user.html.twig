@@ -2,10 +2,14 @@
 
 {% block body %}
     <div class="container">
+        <a href="{{ path('conversation.show', {id: conversation.id}) }}">Back to conversation</a>
         <div class="added">
             <h4>participant</h4>
             {% for user in conversation.user %}
-                <p>{{ user.username }}</p>
+                <div class="participant">
+                    <p>{{ user.username }}</p>
+                    <a href="{{ path('conversation.user.remove', {uid: user.id, cid: conversation.id}) }}" class="btn btn-secondary">Remove</a>
+                </div>
             {% endfor %}
         </div>
         <div class="addable">

@@ -94,41 +94,35 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->remove('roles');
         $form->remove('password');
-        $form->add('cover', FileType::class, ['data_class' => null, 'required' => false]);
+        $form->add('uploaded', FileType::class, ['required' => false]);
         $form->add('submit', SubmitType::class, ['label' => 'Edit']);
         $form->add('reset', SubmitType::class, ['label' => 'reset', 'attr' => ['class' => 'btn btn-secondary']]);
-    
-        
-        if ($request->files->get('user')['cover'] == null) {
-            $file = new UploadedFile(__FILE__,'null');
-            $request->files->set('user', ['cover' => $file]);
-        }
         
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            $form->getData()->setCover('/123');
-            dd($form->getData(),$form->isValid(),$form->getErrors());
-            if ($form->isValid()) {
-                if ($form->get('reset')->isClicked()) {
-                    $this->resetPassword($form->getData());
-                    
-                    $this->addFlash('success', 'An email send to '.$user->getEmail());
-    
-                    return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);
-                }
-                $file = $request->files->get('user')['cover'];
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('reset')->isClicked()) {
+                $this->resetPassword($form->getData());
                 
-                $image = 'data:image/'.$file->getClientOriginalExtension().';base64,'.base64_encode(file_get_contents($file->getRealPath()));
-                $user->setCover($image);
+                $this->addFlash('success', 'An email send to '.$user->getEmail());
                 
-                $this->em->persist($user);
-                $this->em->flush();
-    
-                $this->addFlash('success', 'Profile sauved');
-    
-                return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);            
+                return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);
             }
+
+            if ($form->getData()->getUploaded() != null) {
+                $file = $request->files->get('user')['uploaded'];
+    
+                $form->getData()->setCover($form->getData()->getId().'.'.$file->guessExtension());
+                
+                $file->move(__DIR__.'/../../public/img/avatar/', $form->getData()->getCover());
+            }
+            
+            $this->em->persist($user);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Profile sauved');
+
+            return $this->redirectToRoute('profile.show', ['id' => $user->getId()]);   
         }
         
 

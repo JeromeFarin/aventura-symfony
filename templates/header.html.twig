@@ -19,7 +19,7 @@
                                     {% endfor %}
                                 <a href="{{ path('conversation.index') }}">Conversation</a>
                             </div>
-                            <p><i id="conversation" class="far fa-envelope"></i> | <a href="{{ path('profile.show', {id: app.user.id}) }}"><img width="30px" src="{{app.user.cover}}" alt="{{app.user.username}}"></a> | <a href="{{ logout_path('main') }}">Logout</a></p>   
+                            <p><i id="conversation" class="far fa-envelope"></i> | <a href="{{ path('profile.show', {id: app.user.id}) }}"><img width="30px" src="/img/avatar/{{app.user.cover}}" alt="{{app.user.username}}"></a> | <a href="{{ logout_path('main') }}">Logout</a></p>   
                     {% else %}
                         <p><a href="{{ path('app_login') }}">Login</a> | <a href="{{ path('register') }}">Register</a></p>
                     {% endif %}

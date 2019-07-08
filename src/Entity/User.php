@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -57,6 +57,11 @@ class User implements UserInterface
     private $cover;
 
     /**
+     * @var UploadedFile|null
+     */
+    private $uploaded;
+
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Conversation", mappedBy="user")
      */
     private $conversations;
@@ -64,7 +69,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->topics = new ArrayCollection();
-        $this->cover = 'https://img.pngio.com/png-file-svg-profile-png-980_980.png';
+        $this->cover = 'default.png';
         $this->conversations = new ArrayCollection();
     }
 
@@ -208,6 +213,22 @@ class User implements UserInterface
         $this->cover = $cover;
 
         return $this;
+    }
+
+    /**
+     * @return UploadedFile|null
+     */
+    public function getUploaded(): ?UploadedFile
+    {
+        return $this->uploaded;
+    }
+
+    /**
+     * @param null|UploadedFile $uploaded
+     */
+    public function setUploaded(?UploadedFile $uploaded): void
+    {
+        $this->uploaded = $uploaded;
     }
 
     /**

@@ -105,7 +105,7 @@ class ConversationController extends AbstractController
                 $this->em->flush();
             }
 
-            return $this->redirectToRoute('conversation.show', ['id' => $id]);
+            return $this->redirectToRoute('conversation.user', ['id' => $id]);
         }
 
         return $this->render('conversation/user.html.twig', [
@@ -113,5 +113,25 @@ class ConversationController extends AbstractController
             'users' => $userRepo->findAllNotInConv($users),
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/conversation/{cid}/user/{uid}/remove", name="conversation.user.remove")
+     * @param Request $request
+     * @param integer $uid
+     * @param integer $cid
+     * @return void
+     */
+    public function remove(Request $request, int $uid, int $cid, UserRepository $userRepo)
+    {
+        $conversation = $this->repository->find($cid);
+        $user = $userRepo->find($uid);
+
+        $conversation->removeUser($user);
+
+        $this->em->persist($conversation);
+        $this->em->flush();
+
+        return $this->redirectToRoute('conversation.user', ['id' => $cid]);
     }
 }

@@ -20,7 +20,7 @@
             </div>
         {% endfor %}
 
-        <img width="200px" src="{{ user.cover }}" alt="{{ user.username }} Cover"><br>
+        <img width="200px" src="/img/avatar/{{ user.cover }}" alt="{{ user.username }} Cover"><br>
 
         {% if user.id == app.user.id %}
             <a href="{{ path('user.edit', {id: user.id}) }}" class="btn btn-primary">Edit</a>
