@@ -45,7 +45,7 @@ class TchatController extends AbstractController
     public function messages()
     {
         return $this->render('tchat/messages.html.twig', [
-            'tchats' => $this->repository->findBy([],['id' => 'desc'])
+            'tchats' => $this->repository->findBy([],['id' => 'desc'],20)
         ]);
     }
 }
