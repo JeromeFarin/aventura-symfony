@@ -3,6 +3,8 @@
 {% block body %}
 
 <div class="container">
+    <div id="tchat"></div>
+
     {% for category in categories %}
         {% if category.parent is null %}
             <div class="category_parent">

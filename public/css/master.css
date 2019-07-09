@@ -15,3 +15,13 @@ footer {
 #page_body {
     margin-bottom: 100px;
 }
+
+#tchat {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+#tchat_messages {
+    height: 200px;
+    overflow: auto;
+}

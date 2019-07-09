@@ -66,11 +66,17 @@ class User implements \Serializable, UserInterface
      */
     private $conversations;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tchat", mappedBy="user")
+     */
+    private $tchats;
+
     public function __construct()
     {
         $this->topics = new ArrayCollection();
         $this->cover = 'default.png';
         $this->conversations = new ArrayCollection();
+        $this->tchats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -288,5 +294,36 @@ class User implements \Serializable, UserInterface
             $this->uploaded,
             $this->conversations,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|Tchat[]
+     */
+    public function getTchats(): Collection
+    {
+        return $this->tchats;
+    }
+
+    public function addTchat(Tchat $tchat): self
+    {
+        if (!$this->tchats->contains($tchat)) {
+            $this->tchats[] = $tchat;
+            $tchat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTchat(Tchat $tchat): self
+    {
+        if ($this->tchats->contains($tchat)) {
+            $this->tchats->removeElement($tchat);
+            // set the owning side to null (unless already changed)
+            if ($tchat->getUser() === $this) {
+                $tchat->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
