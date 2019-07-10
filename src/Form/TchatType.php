@@ -15,7 +15,7 @@ class TchatType extends AbstractType
     {
         $builder
             ->add('message', TextareaType::class, ['label' => false])
-            ->add('submit', SubmitType::class, ['attr' => ['id' => 'tchat_button']])
+            ->add('submit', SubmitType::class, ['attr' => ['formaction' => '/tchat']])
         ;
     }
 

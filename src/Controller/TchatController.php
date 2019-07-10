@@ -8,35 +8,35 @@ use App\Repository\TchatRepository;
 use App\Form\TchatType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Tchat;
+use App\Repository\UserRepository;
 
 class TchatController extends AbstractController
 {
     private $repository;
     private $em;
 
-    public function __construct(ObjectManager $em,TchatRepository $repository) {
+    public function __construct(ObjectManager $em, TchatRepository $repository) {
         $this->repository = $repository;
         $this->em = $em;
     }
     /**
      * @Route("/tchat", name="tchat")
      */
-    public function index(Request $request)
+    public function index(Request $request, UserRepository $userRepo)
     {
-        $form = $this->createForm(TchatType::class);
+        $user = $request->get('tchat_user');
+        $message = $request->get('tchat_message');
 
-        $form->handleRequest($request);
+        $tchat = new Tchat();
+        $tchat->setMessage($message);
+        $tchat->setUser($userRepo->find($user));
 
-        if ($form->isSubmitted()) {
-            $form->getData()->setUser($this->getUser());
-
-            $this->em->persist($form->getData());
-            $this->em->flush();
-        }
-
-        return $this->render('tchat/index.html.twig', [
-            'form' => $form->createView()
-        ]);
+        $this->em->persist($tchat);
+        $this->em->flush();
+    
+        return new Response();
     }
 
     /**

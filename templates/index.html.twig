@@ -3,7 +3,18 @@
 {% block body %}
 
 <div class="container">
-    <div id="tchat"></div>
+    <div id="tchat">
+        <div id="tchat_messages">Loading ...</div>
+        {% if is_granted('ROLE_USER') %}
+            <form id="tchat_form" method="post">
+            <input type="hidden" id="tchat_user" value="{{ app.user.id }}">
+                <div class="form-group">
+                    <textarea id="tchat_message" class="form-control" rows="3" required></textarea><br>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% endif %}
+    </div>
 
     {% for category in categories %}
         {% if category.parent is null %}

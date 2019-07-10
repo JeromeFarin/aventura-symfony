@@ -1,15 +1,23 @@
-function tchat(){
+$('#tchat_form').submit(function (e) { 
+    e.preventDefault();
+    var user = $('#tchat_user').val();
+    var message = $('#tchat_message').val();
+
     $.ajax({
-        url:'/tchat',
-        type: "POST",
+        url : '/tchat',
+        type : 'POST',
+        dataType: 'html',
+        data : {
+            'tchat_user': user,
+            'tchat_message': message
+        },
         async: true,
-        success: function (data)
+        success: function ()
         {
-            $('#tchat').html(data);
+            $('#tchat_message').val(''); 
         }
-    });
-    tchatRefresh();
-}
+     });
+ });
 
 function tchatRefresh() {
     setTimeout(function() {
@@ -24,7 +32,7 @@ function tchatRefresh() {
         });
 
         tchatRefresh();
-    }, 3000);
+    }, 1000);
 }
 
-tchat();
+tchatRefresh();
