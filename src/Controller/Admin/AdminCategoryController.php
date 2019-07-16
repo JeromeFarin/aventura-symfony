@@ -9,13 +9,15 @@ use App\Repository\CategoryRepository;
 use App\Form\CategoryType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Entity\Category;
 
 class AdminCategoryController extends AbstractController
 {
     private $categoryRepository;
     private $em;
 
-    public function __construct(CategoryRepository $categoryRepository, ObjectManager $em) {
+    public function __construct(CategoryRepository $categoryRepository, ObjectManager $em)
+    {
         $this->categoryRepository = $categoryRepository;
         $this->em = $em;
     }
@@ -37,7 +39,7 @@ class AdminCategoryController extends AbstractController
 
             return $this->redirectToRoute('admin.category.index');
         }
-        
+
         return $this->render('admin/category/index.html.twig', [
             'title' => 'Aventura',
             'form' => $form->createView(),
@@ -50,9 +52,9 @@ class AdminCategoryController extends AbstractController
      * @param Request $request
      * @return void
      */
-    public function remove(Request $request, int $id)
+    public function remove(Request $request, Category $category)
     {
-        $this->em->remove($this->categoryRepository->find($id));
+        $this->em->remove($category);
         $this->em->flush();
 
         return $this->redirectToRoute('admin.category.index');
@@ -63,10 +65,10 @@ class AdminCategoryController extends AbstractController
      * @param Request $request
      * @return void
      */
-    public function edit(Request $request, int $id)
+    public function edit(Request $request, Category $category)
     {
-        
-        $form = $this->createForm(CategoryType::class, $this->categoryRepository->find($id));
+
+        $form = $this->createForm(CategoryType::class, $category);
 
         $form->handleRequest($request);
 

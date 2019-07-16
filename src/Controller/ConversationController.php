@@ -10,13 +10,16 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Repository\ConversationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Entity\Conversation;
+use App\Entity\User;
 
 class ConversationController extends AbstractController
 {
     private $em;
     private $repository;
 
-    public function __construct(ObjectManager $em, ConversationRepository $repository) {
+    public function __construct(ObjectManager $em, ConversationRepository $repository)
+    {
         $this->em = $em;
         $this->repository = $repository;
     }
@@ -50,10 +53,8 @@ class ConversationController extends AbstractController
      * @param integer $id
      * @return void
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, Conversation $conversation)
     {
-        $conversation = $this->repository->find($id);
-
         $form = $this->createForm(ConversationType::class);
         $form->remove('title');
 
@@ -80,12 +81,10 @@ class ConversationController extends AbstractController
      * @param Request $request
      * @return void
      */
-    public function user(Request $request, int $id, UserRepository $userRepo)
+    public function user(Request $request, Conversation $conversation, UserRepository $userRepo)
     {
-        $conversation = $this->repository->find($id);
-
         $users = [];
-        
+
         foreach ($conversation->getUser() as $value) {
             $users[] = $value->getId();
         }
@@ -105,7 +104,7 @@ class ConversationController extends AbstractController
                 $this->em->flush();
             }
 
-            return $this->redirectToRoute('conversation.user', ['id' => $id]);
+            return $this->redirectToRoute('conversation.user', ['id' => $conversation->getId()]);
         }
 
         return $this->render('conversation/user.html.twig', [
@@ -122,16 +121,13 @@ class ConversationController extends AbstractController
      * @param integer $cid
      * @return void
      */
-    public function remove(Request $request, int $uid, int $cid, UserRepository $userRepo)
+    public function remove(Request $request, User $user, Conversation $conversation)
     {
-        $conversation = $this->repository->find($cid);
-        $user = $userRepo->find($uid);
-
         $conversation->removeUser($user);
 
         $this->em->persist($conversation);
         $this->em->flush();
 
-        return $this->redirectToRoute('conversation.user', ['id' => $cid]);
+        return $this->redirectToRoute('conversation.user', ['id' => $conversation->getId()]);
     }
 }

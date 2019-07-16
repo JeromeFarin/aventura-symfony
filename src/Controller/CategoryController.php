@@ -9,6 +9,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\TopicRepository;
 use App\Form\TopicType;
 use Doctrine\Common\Persistence\ObjectManager;
+use App\Entity\Category;
 
 class CategoryController extends AbstractController
 {
@@ -16,7 +17,8 @@ class CategoryController extends AbstractController
     private $topicRepository;
     private $em;
 
-    public function __construct(CategoryRepository $categoryRepository, TopicRepository $topicRepository, ObjectManager $em) {
+    public function __construct(CategoryRepository $categoryRepository, TopicRepository $topicRepository, ObjectManager $em)
+    {
         $this->categoryRepository = $categoryRepository;
         $this->topicRepository = $topicRepository;
         $this->em = $em;
@@ -25,7 +27,7 @@ class CategoryController extends AbstractController
     /**
      * @Route("/category/{id}", name="category.show")
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, Category $category)
     {
         $form = $this->createForm(TopicType::class);
         $form->add('title', null, ['required' => true]);
@@ -33,18 +35,18 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $form->getData()->setCategory($this->categoryRepository->find($id));
+            $form->getData()->setCategory($category);
             $form->getData()->setUser($this->getUser());
             $this->em->persist($form->getData());
             $this->em->flush();
 
-            return $this->redirectToRoute('category.show', ['id' => $id]);
+            return $this->redirectToRoute('category.show', ['id' => $category->getId()]);
         }
 
         return $this->render('category/show.html.twig', [
-            'category' => $this->categoryRepository->find($id),
+            'category' => $category,
             'form' => $form->createView(),
-            'topics' => $this->topicRepository->findBy(['category' => $id])
+            'topics' => $this->topicRepository->findBy(['category' => $category->getId()])
         ]);
     }
 }

@@ -9,13 +9,15 @@ use App\Repository\TopicRepository;
 use App\Form\TopicType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use App\Entity\Topic;
 
 class TopicController extends AbstractController
 {
     private $topicRepository;
     private $em;
 
-    public function __construct(TopicRepository $topicRepository, ObjectManager $em) {
+    public function __construct(TopicRepository $topicRepository, ObjectManager $em)
+    {
         $this->topicRepository = $topicRepository;
         $this->em = $em;
     }
@@ -23,25 +25,25 @@ class TopicController extends AbstractController
     /**
      * @Route("/topic/{id}", name="topic.show")
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, Topic $topic)
     {
         $form = $this->createForm(TopicType::class);
         $form->remove('title');
-        $form->add('content',TextareaType::class,['label' => false, 'attr' => ['class' => 'ckeditor']]);
+        $form->add('content', TextareaType::class, ['label' => false, 'attr' => ['class' => 'ckeditor']]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $form->getData()->setUser($this->getUser());
-            $form->getData()->setParent($this->topicRepository->find($id));
+            $form->getData()->setParent($topic);
             $this->em->persist($form->getData());
             $this->em->flush();
 
-            return $this->redirectToRoute('topic.show', ['id' => $id]);
+            return $this->redirectToRoute('topic.show', ['id' => $topic->getId()]);
         }
 
         return $this->render('topic/show.html.twig', [
-            'topic' => $this->topicRepository->find($id),
+            'topic' => $topic,
             'form' => $form->createView()
         ]);
     }
@@ -51,10 +53,8 @@ class TopicController extends AbstractController
      * @param Request $request
      * @return void
      */
-    public function remove(Request $request, int $id)
+    public function remove(Request $request, Topic $topic)
     {
-        $topic = $this->topicRepository->find($id);
-
         $this->em->remove($topic);
         $this->em->flush();
 
@@ -66,13 +66,12 @@ class TopicController extends AbstractController
      * @param Request $request
      * @return void
      */
-    public function edit(Request $request, int $id)
+    public function edit(Request $request, Topic $topic)
     {
-        $topic = $this->topicRepository->find($id);
 
         $form = $this->createForm(TopicType::class, $topic);
         $form->remove('title');
-        $form->add('content',TextareaType::class,['label' => false, 'attr' => ['class' => 'ckeditor']]);
+        $form->add('content', TextareaType::class, ['label' => false, 'attr' => ['class' => 'ckeditor']]);
 
         $form->handleRequest($request);
 
