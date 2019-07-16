@@ -273,27 +273,17 @@ class User implements \Serializable, UserInterface
             $this->email,
             $this->roles,
             $this->password,
-            $this->topics,
-            $this->code,
-            $this->cover,
-            $this->uploaded,
-            $this->conversations,
         ));
     }
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->email,
             $this->roles,
-            $this->password,
-            $this->topics,
-            $this->code,
-            $this->cover,
-            $this->uploaded,
-            $this->conversations,
-            ) = unserialize($serialized);
+            $this->password
+        ) = unserialize($serialized);
     }
 
     /**
