@@ -1,0 +1,10 @@
+{
+  "entrypoints": {
+    "tchat": {
+      "js": [
+        "/public/js/runtime.js",
+        "/public/js/tchat.js"
+      ]
+    }
+  }
+}

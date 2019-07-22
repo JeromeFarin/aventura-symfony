@@ -15,6 +15,7 @@
   <body>
     {% include "header.html.twig" %}
     {% include "flash.html.twig" %}
+    <div id="tchat_react" class="container"></div>
     <div id="page_body">
       {% block body %}{% endblock %}
     </div>
@@ -29,6 +30,9 @@
     <script src="/js/conversation.js"></script>
     <script src="/js/flashes.js"></script>
     <script src="/js/modalRemove.js"></script>
+    <script src="/js/tchatAjax.js"></script>
+
+    <script src="/js/runtime.js"></script>
     <script src="/js/tchat.js"></script>
   </body>
 </html>

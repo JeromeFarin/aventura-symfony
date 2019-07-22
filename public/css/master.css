@@ -25,3 +25,9 @@ footer {
     height: 200px;
     overflow: auto;
 }
+
+#tchat_react div {
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    padding: 10px;
+}
