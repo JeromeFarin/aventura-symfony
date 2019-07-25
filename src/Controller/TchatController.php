@@ -16,22 +16,24 @@ class TchatController extends AbstractController
 {
     private $repository;
     private $em;
+    private $userRepo;
 
-    public function __construct(ObjectManager $em, TchatRepository $repository) {
+    public function __construct(ObjectManager $em, TchatRepository $repository, UserRepository $userRepo) {
         $this->repository = $repository;
         $this->em = $em;
+        $this->userRepo = $userRepo;
     }
     /**
      * @Route("/tchat", name="tchat")
      */
-    public function index(Request $request, UserRepository $userRepo)
+    public function index(Request $request)
     {
         $user = $request->get('tchat_user');
         $message = $request->get('tchat_message');
 
         $tchat = new Tchat();
         $tchat->setMessage($message);
-        $tchat->setUser($userRepo->find($user));
+        $tchat->setUser($this->userRepo->find($user));
 
         $this->em->persist($tchat);
         $this->em->flush();
@@ -44,8 +46,42 @@ class TchatController extends AbstractController
      */
     public function messages()
     {
-        return $this->render('tchat/messages.html.twig', [
-            'tchats' => $this->repository->findBy([],['id' => 'desc'],20)
-        ]);
+        $messages = [];
+        foreach ($this->repository->findBy([],['id' => 'desc'],20) as $value) {
+            $messages[] = [
+                'id' => $value->getId(),
+                'content' => $value->getMessage(),
+                'user' => $value->getUser()->getUsername()
+            ];
+        }
+
+        return $this->json($messages);
+        // return $this->render('tchat/messages.html.twig', [
+        //     'tchats' => $this->repository->findBy([],['id' => 'desc'],20)
+        // ]);
+    }
+
+    /**
+     * @Route("/tchat/new", name="tchat.new")
+     */
+    public function new(Request $request)
+    {
+        if ($request->get('content')) {
+
+            $tchat = new Tchat();
+            $tchat->setMessage($request->get('content'));
+            $tchat->setUser($this->userRepo->find($request->get('user')));
+
+            $this->em->persist($tchat);
+            $this->em->flush();
+
+            $response = [
+                'content' => $tchat->getMessage(),
+                'user' => $tchat->getUser()->getUsername()
+            ];
+        } else {
+            $response = 'ERREUR';
+        }
+        return $this->json($response);
     }
 }

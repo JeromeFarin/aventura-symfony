@@ -19,22 +19,17 @@ class TchatRepository extends ServiceEntityRepository
         parent::__construct($registry, Tchat::class);
     }
 
-    // /**
-    //  * @return Tchat[] Returns an array of Tchat objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function tchatList()
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            // ->andWhere('t.exampleField = :val')
+            // ->setParameter('val', $value)
+            ->orderBy('t.id', 'desc')
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Tchat

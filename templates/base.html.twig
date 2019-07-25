@@ -15,7 +15,14 @@
   <body>
     {% include "header.html.twig" %}
     {% include "flash.html.twig" %}
-    <div id="tchat_react" class="container"></div>
+
+    {% if app.user %}
+      <div id="tchat_react" class="container" data-user="{{ app.user.id }}"></div>
+    {% else %}
+      <div id="tchat_react" class="container" data-user=""></div>
+    {% endif %}
+    
+    
     <div id="page_body">
       {% block body %}{% endblock %}
     </div>

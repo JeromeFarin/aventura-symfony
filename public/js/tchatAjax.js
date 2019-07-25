@@ -32,7 +32,7 @@ function tchatRefresh() {
         });
 
         tchatRefresh();
-    }, 1000);
+    }, 100000000);
 }
 
 tchatRefresh();
